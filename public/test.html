@@ -38,17 +38,14 @@ $(document).ready(function(){
         var newTable = '';
 
         $.each(data, function (i, item) {
-
             newTable += '<tr><td>' + data[i].code + '</td><td>' + data[i].country_name +
             '</td><td>'+ data[i].gdp + '</td><td>'+ data[i].inflation + '</td></tr>';
         });
 
         $('#location').append(newTable);
-
         },
 
         error: function (msg) {
-
             alert(msg.responseText);
         }
     });
@@ -57,7 +54,7 @@ $(document).ready(function(){
 </script>
 
 <form action="http://localhost:3000/">
-<input type="submit" value="Go back to main screen" />
+  <input type="submit" value="Go back to main screen" />
 </form>
 
 </body>

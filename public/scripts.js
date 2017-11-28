@@ -56,14 +56,3 @@ for (var i = 0, l = elements.length; i < l; i++) {
     $search.attr('placeholder', (data[0].text !== '' ? data[0].text : $select.data('placeholder')));
   });
 }
-
-$( document ).ready(function() {
-  function httpGet()
-  {
-      var xmlHttp = new XMLHttpRequest();
-      xmlHttp.setRequestHeader("Content-type", "application/json");
-      xmlHttp.open("GET", "127.0.0.1:3000/test", false ); // false for synchronous request
-      xmlHttp.send( null );
-      console.log(xmlHttp.responseText);
-  }
-});

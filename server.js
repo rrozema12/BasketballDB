@@ -19,26 +19,28 @@ var connection = mysql.createConnection({
   password: "rrozema69492485",
   database: "rrozema_DB"
 });
-
+  connection.connect();
 function onInitialLoad(request, response) {
   response.sendFile(path.join(__dirname + '/index.html'));
 }
 
 function test(request, response) {
+
   response.sendFile(path.join(__dirname + '/public/test.html'));
 }
 
 function loadTestTable(request, response) {
     var result;
-    connection.connect();
+
     console.log("Database connection successful.");
 
     var queryString = 'SELECT * FROM Country;';
 
     connection.query(queryString, function(err, rows, fields) {
+      console.log(err);
         if (err) throw err;
         result = rows;
-        connection.end();
+
         console.log("Database connection ended.");
         response.send(result);
         console.log("JSON data from the query has been sent.");
