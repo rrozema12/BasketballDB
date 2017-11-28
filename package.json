@@ -15,8 +15,13 @@
     "express-handlebars": "^3.0.0",
     "express-hbs": "^1.0.4",
     "handlebars": "^4.0.11",
+<<<<<<< HEAD
     "hbs": "^4.0.1",
     "path": "^0.12.7",
     "tableify": "^1.1.0"
+=======
+    "mysql": "^2.15.0",
+    "path": "^0.12.7"
+>>>>>>> c77dcf6c69401332003c853c5c974cf5ae18e5fb
   }
 }
