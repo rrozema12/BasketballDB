@@ -1,6 +1,7 @@
 var express = require('express');
 var mysql = require("mysql");
 var path = require('path');
+var tableify = require('tableify');
 
 var app = express();
 
@@ -8,18 +9,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', onInitialLoad);
 
-function onInitialLoad(request, response) {
-  response.sendFile(path.join(__dirname + '/../index.html'));
-}
+app.get('/test', test);
+app.get('/loadTableData', loadTestTable);
 
-app.listen(3000, function() {
-  console.log("Our server is listening to localhost:3000");
-});
-
-
-/*
-// First you need to create a connection to the db
-var con = mysql.createConnection({
+var connection = mysql.createConnection({
   host: "147.222.163.1",
   port: "3306",
   user: "rrozema",
@@ -27,14 +20,37 @@ var con = mysql.createConnection({
   database: "rrozema_DB"
 });
 
-con.connect(function(err){
-  if(err){
-    console.log('Error connecting to Db');
-    return;
-  }
-  console.log('Connection established');
+function onInitialLoad(request, response) {
+  response.sendFile(path.join(__dirname + '/index.html'));
+}
+
+function test(request, response) {
+  response.sendFile(path.join(__dirname + '/public/test.html'));
+}
+
+function loadTestTable(request, response) {
+    var result;
+    connection.connect();
+    console.log("Database connection successful.");
+
+    var queryString = 'SELECT * FROM Country;';
+
+    connection.query(queryString, function(err, rows, fields) {
+        if (err) throw err;
+        result = rows;
+        connection.end();
+        console.log("Database connection ended.");
+        response.send(result);
+        console.log("JSON data from the query has been sent.");
+
+    });
+}
+
+app.listen(3000, function() {
+  console.log("Our server is listening to localhost:3000");
 });
 
+/* Ending the connection on the database
 con.end(function(err) {
   // The connection is terminated gracefully
   // Ensures all previously enqueued queries are still

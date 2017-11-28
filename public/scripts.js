@@ -57,16 +57,13 @@ for (var i = 0, l = elements.length; i < l; i++) {
   });
 }
 
-
-var mysql = require('mysql');
-
-var con = mysql.createConnection({
-  host: "147.222.163.1",
-  user: "rrozema",
-  password: "rrozema69492485"
-});
-
-con.connect(function(err) {
-  if (err) console.log("bad news");
-  console.log("Connected!");
+$( document ).ready(function() {
+  function httpGet()
+  {
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.setRequestHeader("Content-type", "application/json");
+      xmlHttp.open("GET", "127.0.0.1:3000/test", false ); // false for synchronous request
+      xmlHttp.send( null );
+      console.log(xmlHttp.responseText);
+  }
 });

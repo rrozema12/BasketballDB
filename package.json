@@ -10,9 +10,13 @@
   "author": "Ryan Rozema and Sander Susee",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.18.2",
     "express": "^4.14.1",
     "express-handlebars": "^3.0.0",
+    "express-hbs": "^1.0.4",
     "handlebars": "^4.0.11",
-    "path": "^0.12.7"
+    "hbs": "^4.0.1",
+    "path": "^0.12.7",
+    "tableify": "^1.1.0"
   }
 }

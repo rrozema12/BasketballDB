@@ -19,16 +19,16 @@
   /* .box-shadow(@form-control-focus-box-shadow); */
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
-  
+
   /* border-color: @input-border-focus; */
   border-color: #66afe9;
-  
+
   /* !important not needed with less */
   border-top-width: 1px!important;
   border-top-style: solid!important;
   border-top-left-radius: 4px!important;
   border-top-right-radius: 4px!important;
-  
+
   /* margin-top: -@input-height-base; */
   margin-top: -34px!important;
 }
@@ -42,10 +42,10 @@
   border-left: 0;
   border-right: 0;
   border-radius: 0;
-  
+
   /* padding: @padding-base-vertical @padding-base-horizontal; */
   padding: 6px 12px;
-  
+
   /* height: calc(@input-height-base - 1px); */
   height: 33px;
 }
