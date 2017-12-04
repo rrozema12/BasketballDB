@@ -13,7 +13,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 
 
-// Routes
+// Test Routes
 app.get('/', onInitialLoad);
 app.get('/test', test);
 app.get('/loadTableData', loadTestTable);
@@ -46,65 +46,54 @@ function test(request, response) {
 function loadTestTable(request, response) {
   var result;
 
-  console.log("Database connection successful.");
-
   var queryString = "SELECT * FROM Country;";
 
   connection.query(queryString, function(err, rows, fields) {
     if (err) throw err;
     result = rows;
-
-    console.log("Database connection ended.");
     response.send(result);
-    console.log("JSON data from the query has been sent.");
-
   });
 }
 
-function insertTestTable(req, res) {
-  var jsondata = req.body;
-  console.log("json data is: " + JSON.stringify(jsondata));
+function insertTestTable(request, response) {
+  var jsondata = request.body;
   var values = [];
 
   for (var i = 0; i < jsondata.length; i++)
     values.push([jsondata[i].code, jsondata[i].country_name, jsondata[i].gdp, jsondata[i].inflation]);
 
-  console.log(values);
-  console.log("values are " + values);
-  //Bulk insert using nested array [ [a,b],[c,d] ] will be flattened to (a,b),(c,d)
   connection.query('INSERT INTO Country (code, country_name, gdp, inflation) VALUES ?;', [values], function(err, result) {
     if (err) {
-      res.send(err.sqlMessage);
+      response.status(500).send(err.sqlMessage);
+      console.log(err.sqlMessage);
     } else {
-      res.send('Success');
+      response.send('Success');
     }
   });
 }
 
-function updateTestTable(req, res) {
-  var jsondata = req.body;
-  console.log("json data is: " + jsondata);
+function updateTestTable(request, response) {
+  var jsondata = request.body;
 
   //Bulk insert using nested array [ [a,b],[c,d] ] will be flattened to (a,b),(c,d)
   connection.query('UPDATE Country SET country_name = ?, gdp = ?, inflation = ? WHERE code = ?;', [jsondata.country_name, jsondata.gdp, jsondata.inflation, jsondata.code], function(err, result) {
-    if (err) {
-      res.send(err.sqlMessage);
+    if (result.affectedRows == 0) {
+      response.status(501).send("The row that you are trying to update doesn't exist.");
     } else {
-      res.send('Success');
+      response.send('Success');
     }
   });
 }
 
-function deleteFromTestTable(req, res) {
-  var jsondata = req.body.code;
-  console.log("json data is: " + jsondata);
+function deleteFromTestTable(request, response) {
+  var jsondata = request.body.code;
 
   //Bulk insert using nested array [ [a,b],[c,d] ] will be flattened to (a,b),(c,d)
   connection.query('DELETE FROM Country WHERE code = ?', jsondata, function(err, result) {
-    if (err) {
-      res.send(err.sqlMessage);
+    if (result.affectedRows == 0) {
+      response.status(502).send("The row that you are trying to delete doesn't exist.");
     } else {
-      res.send('Success');
+      response.send('Success');
     }
   });
 }

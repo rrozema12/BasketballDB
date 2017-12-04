@@ -22,6 +22,9 @@ function sendInsertJSON(){
   http.onreadystatechange = function() { // Call a function when the state changes.
     if (http.readyState === 4 && http.status === 200) {
     }
+    if (http.status === 500) {
+      alert(http.responseText);
+    }
   };
   http.send(data);
   document.location.reload();
@@ -45,6 +48,10 @@ function sendUpdateJSON(){
   http.onreadystatechange = function() { // Call a function when the state changes.
     if (http.readyState === 4 && http.status === 200) {
     }
+    if (http.status === 501) {
+      alert(http.responseText);
+    }
+
   };
   http.send(data);
   document.location.reload();
@@ -65,6 +72,9 @@ function sendDeleteJSON(){
 
   http.onreadystatechange = function() { // Call a function when the state changes.
     if (http.readyState === 4 && http.status === 200) {
+    }
+    if (http.status === 502) {
+      alert(http.responseText);
     }
   };
   http.send(data);
