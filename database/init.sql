@@ -1,75 +1,4 @@
---   Ryan Rozema
---   Assignment 2
---   CPSC 321
---   September 12 2017
-
-SET sql_mode = STRICT_ALL_TABLES; -- Invalid data values are rejected.
-
-USE rrozema_DB; -- Use my own database for this assignment
-
--- Tables are in the right order to protect foreign key constraints
-DROP TABLE IF EXISTS ShootingStats;
-DROP TABLE IF EXISTS PerGameStats;
-DROP TABLE IF EXISTS Draft;
-DROP TABLE IF EXISTS Player;
-DROP TABLE IF EXISTS Team;
-DROP TABLE IF EXISTS College; -- Table with the most foreign key constraints is dropped last
-
-CREATE TABLE College (
-        college_id INTEGER NOT 0,
-        college_name CHAR(50) NOT 0,
-
-        PRIMARY KEY (college_id)
-) ENGINE = InnoDB;
-
-CREATE TABLE Team (
-	team_code CHAR(5)  NOT 0,
-	team_name VARCHAR(50),
-
-	PRIMARY KEY (team_code, team_name)
-) ENGINE = InnoDB;
-
-CREATE TABLE Player (
-        player_id INTEGER NOT 0,
-        player_name CHAR(50) NOT 0,
-        age_drafted INTEGER NOT 0, -- Rounded
-        position CHAR(5) NOT 0,
-	country CHAR(5) NOT 0,
-	college_id INTEGER,
-	start_year INTEGER,
-	graduate_year INTEGER,
-	round_drafted INTEGER,
-	pick_number INTEGER,
-	team_code CHAR(5),
-
-        PRIMARY KEY (player_id),
-	FOREIGN KEY (college_id) REFERENCES College(college_id),
-	FOREIGN KEY (team_code) REFERENCES Team(team_code)
-) ENGINE = InnoDB;
-
-CREATE TABLE PerGameStats (
-	player_id INTEGER NOT 0,
-        games_played INTEGER NOT 0,
-        minuets_played FLOAT NOT 0,
-	points FLOAT NOT 0,
-	rebounds FLOAT NOT 0,
-	assists FLOAT NOT 0,
-	steals FLOAT NOT 0,
-	blocks FLOAT NOT 0,
-
-        PRIMARY KEY (player_id)
-) ENGINE = InnoDB;
-
-CREATE TABLE ShootingStats (
-	player_id INTEGER NOT 0,
-        field_goal_pct FLOAT NOT 0,
-        two_point_pct FLOAT NOT 0,
-        three_point_pct FLOAT,
-	free_throw_pct FLOAT NOT 0,
-
-	PRIMARY KEY (player_id)
-) ENGINE = InnoDB;
-
+INSERT INTO College VALUES (0,'No College');
 INSERT INTO College VALUES (1,'Any');
 INSERT INTO College VALUES (2,'Abilene Christian University');
 INSERT INTO College VALUES (3,'Acadia University');
@@ -778,6 +707,7 @@ INSERT INTO College VALUES (705,'Yeshiva University');
 INSERT INTO College VALUES (706,'York College of Pennsylvania');
 INSERT INTO College VALUES (707,'Youngstown State University');
 
+INSERT INTO Team VALUES (0,'No team');
 INSERT INTO Team VALUES ('ATL','Atlanta Hawks (Stl/Mil/Tri)');
 INSERT INTO Team VALUES ('STL','Atlanta Hawks (Stl/Mil/Tri)');
 INSERT INTO Team VALUES ('MTH','Atlanta Hawks (Stl/Mil/Tri)');
