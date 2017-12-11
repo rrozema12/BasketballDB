@@ -12,12 +12,23 @@ var app = express();
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 
-
-// Routes
+// Routes for pages
 app.get('/', onInitialLoad);
 app.get('/NBAData/', showNBAData);
 app.get('/updateNBAData/', updateNBAData);
-app.get('/loadTableDataQuery1/', query1);
+
+// Routes for querying the data
+app.get('/loadTableData/country/:country', query1);
+app.get('/loadTableData/position/:position', query2);
+app.get('/loadTableData/topPicks/', query3);
+app.get('/loadTableData/bestColleges', query4);
+app.get('/loadTableData/mostGamesPlayed', query5);
+app.get('/loadTableData/collegeOne/:firstCollegeId/collegeTwo/:secondCollegeId', query6);
+app.get('/loadTableData/multipleDrafts', query7);
+app.get('/loadTableData/longestCareers', query8);
+app.get('/loadTableData/allPlayers', query9);
+
+// Routes for inserting, updating, and deleting
 app.post('/loadTableData/', insert);
 app.put('/loadTableData/', update);
 app.delete('/loadTableData/', del);
@@ -49,15 +60,127 @@ function updateNBAData(request, response) {
   response.sendFile(path.join(__dirname + '/public/update.html'));
 }
 
-
 function query1(request, response) {
-  var result;
+  var country = request.params.country;
 
+  var result;
+  var queryString = "SELECT player_name, country FROM Player WHERE country <> ?";
+
+  connection.query(queryString, country, function(err, rows, fields) {
+    if (err) throw err;
+    result = rows;
+    response.send(result);
+  });
+}
+
+function query2(request, response) {
+  var position = request.params.position;
+
+  var result;
+  var queryString = "SELECT p.player_name, s.field_goal_pct, p.position FROM Player p NATURAL JOIN ShootingStats s WHERE p.position = ? AND s.field_goal_pct >= (SELECT MAX(s.field_goal_pct) FROM Player p, ShootingStats s WHERE p.position = ? AND p.player_id = s.player_id);";
+
+  connection.query(queryString, [position, position], function(err, rows, fields) {
+    if (err) throw err;
+    result = rows;
+
+    response.send(result);
+  });
+}
+
+function query3(request, response) {
+  var position = request.params.position;
+
+  var result;
+  var queryString = "SELECT t.team_name, COUNT(*) AS first_picks FROM Player p, Team t WHERE p.round = 1 AND p.pick_number = 1 AND t.team_code = p.team_code GROUP BY p.team_code ORDER BY first_picks DESC;";
+
+  connection.query(queryString, function(err, rows, fields) {
+    if (err) throw err;
+    result = rows;
+
+    response.send(result);
+  });
+}
+
+function query4(request, response) {
+  var position = request.params.position;
+
+  var result;
+  var queryString = "SELECT c.college_name, COUNT(*) AS first_picks FROM Player p, College c WHERE p.round = 1 AND p.pick_number = 1 AND c.college_id = p.college_id GROUP BY c.college_id ORDER BY first_picks DESC;";
+
+  connection.query(queryString, function(err, rows, fields) {
+    if (err) throw err;
+    result = rows;
+
+    response.send(result);
+  });
+}
+
+function query5(request, response) {
+  var position = request.params.position;
+
+  var result;
+  var queryString = "SELECT c.college_name, SUM(s.games_played) AS games_played FROM PerGameStats s, College c, Player p WHERE p.player_id = s.player_id AND p.college_id = c.college_id GROUP BY p.college_id ORDER BY games_played DESC LIMIT 50;";
+
+  connection.query(queryString, function(err, rows, fields) {
+    if (err) throw err;
+    result = rows;
+
+    response.send(result);
+  });
+}
+
+function query6(request, response) {
+  var firstCollegeId = request.params.firstCollegeId;
+  var secondCollegeId = request.params.secondCollegeId;
+  var result;
+  var queryString = "SELECT p.player_name, c.college_name, s.points FROM Player p, College c, PerGameStats s WHERE p.player_id = s.player_id AND p.college_id = c.college_id AND c.college_id = ? HAVING s.points >= (SELECT MAX(s.points) FROM PerGameStats s, College c, Player p WHERE p.player_id = s.player_id AND p.college_id = c.college_id AND c.college_id = ?)" +
+    "UNION SELECT p.player_name, c.college_name, s.points FROM Player p, College c, PerGameStats s WHERE p.player_id = s.player_id AND p.college_id = c.college_id AND c.college_id = ? HAVING s.points >= (SELECT MAX(s.points) FROM PerGameStats s, College c, Player p WHERE p.player_id = s.player_id AND p.college_id = c.college_id AND c.college_id = ?);";
+  connection.query(queryString, [firstCollegeId, firstCollegeId, secondCollegeId, secondCollegeId], function(err, rows, fields) {
+    if (err) throw err;
+    result = rows;
+
+    response.send(result);
+  });
+}
+
+function query7(request, response) {
+  var position = request.params.position;
+
+  var result;
+  var queryString = "SELECT player_name, COUNT(*) AS times_drafted FROM Player GROUP BY player_name HAVING COUNT(*) > 1;";
+
+  connection.query(queryString, function(err, rows, fields) {
+    if (err) throw err;
+    result = rows;
+
+    response.send(result);
+  });
+}
+
+function query8(request, response) {
+  var position = request.params.position;
+
+  var result;
+  var queryString = "SELECT player_name, to_year - from_year AS career_length FROM Player ORDER BY career_length DESC LIMIT 10;";
+
+  connection.query(queryString, function(err, rows, fields) {
+    if (err) throw err;
+    result = rows;
+
+    response.send(result);
+  });
+}
+
+function query9(request, response) {
+  var position = request.params.position;
+
+  var result;
   var queryString = "SELECT * FROM Player;";
 
   connection.query(queryString, function(err, rows, fields) {
     if (err) throw err;
     result = rows;
+
     response.send(result);
   });
 }
@@ -107,15 +230,16 @@ function update(request, response) {
     jsondata.player_id
   ];
   connection.query("UPDATE Player SET player_name = ?, age_drafted = ?," +
-  " position = ?, country = ?, college_id = ?, from_year = ?, to_year = ?, round = ?," +
-  " pick_number = ?, team_code = ? WHERE player_id = ?;", values, function(err, result) {
-    console.log(result);
-    if (result.rowCount == 0) {
-      response.status(501).send("The row that you are trying to update doesn't exist.");
-    } else {
-      response.send('Success');
-    }
-  });
+    " position = ?, country = ?, college_id = ?, from_year = ?, to_year = ?, round = ?," +
+    " pick_number = ?, team_code = ? WHERE player_id = ?;", values,
+    function(err, result) {
+      console.log(result);
+      if (result.rowCount == 0) {
+        response.status(501).send("The row that you are trying to update doesn't exist.");
+      } else {
+        response.send('Success');
+      }
+    });
 }
 
 function del(request, response) {
