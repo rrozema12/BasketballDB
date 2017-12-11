@@ -1,6 +1,6 @@
 // Dependencies
 var express = require('express');
-var mysql = require("mysql");
+var mysql = require('mysql');
 var path = require('path');
 var bodyParser = require('body-parser');
 
@@ -13,13 +13,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 
 
-// Test Routes
+// Routes
 app.get('/', onInitialLoad);
-app.get('/test', test);
-app.get('/loadTableData', loadTestTable);
-app.post('/loadTableData', insertTestTable);
-app.put('/loadTableData', updateTestTable);
-app.delete('/loadTableData', deleteFromTestTable);
+app.get('/NBAData/', showNBAData);
+app.get('/updateNBAData/', updateNBAData);
+app.get('/loadTableDataQuery1/', query1);
+app.post('/loadTableData/', insert);
+app.put('/loadTableData/', update);
+app.delete('/loadTableData/', del);
 
 // Database connection info
 var connection = mysql.createConnection({
@@ -38,15 +39,21 @@ function onInitialLoad(request, response) {
   response.sendFile(path.join(__dirname + '/index.html'));
 }
 
-function test(request, response) {
+function showNBAData(request, response) {
 
-  response.sendFile(path.join(__dirname + '/public/test.html'));
+  response.sendFile(path.join(__dirname + '/public/NBAData.html'));
 }
 
-function loadTestTable(request, response) {
+function updateNBAData(request, response) {
+
+  response.sendFile(path.join(__dirname + '/public/update.html'));
+}
+
+
+function query1(request, response) {
   var result;
 
-  var queryString = "SELECT * FROM Country;";
+  var queryString = "SELECT * FROM Player;";
 
   connection.query(queryString, function(err, rows, fields) {
     if (err) throw err;
@@ -55,14 +62,26 @@ function loadTestTable(request, response) {
   });
 }
 
-function insertTestTable(request, response) {
+function insert(request, response) {
   var jsondata = request.body;
   var values = [];
 
   for (var i = 0; i < jsondata.length; i++)
-    values.push([jsondata[i].code, jsondata[i].country_name, jsondata[i].gdp, jsondata[i].inflation]);
+    values.push([
+      jsondata[i].player_id,
+      jsondata[i].player_name,
+      jsondata[i].age_drafted,
+      jsondata[i].position,
+      jsondata[i].country,
+      jsondata[i].college_id,
+      jsondata[i].start_year,
+      jsondata[i].graduate_year,
+      jsondata[i].round_drafted,
+      jsondata[i].pick_number,
+      jsondata[i].team_code
+    ]);
 
-  connection.query('INSERT INTO Country (code, country_name, gdp, inflation) VALUES ?;', [values], function(err, result) {
+  connection.query('INSERT INTO Player VALUES ?;', [values], function(err, result) {
     if (err) {
       response.status(500).send(err.sqlMessage);
       console.log(err.sqlMessage);
@@ -72,12 +91,26 @@ function insertTestTable(request, response) {
   });
 }
 
-function updateTestTable(request, response) {
+function update(request, response) {
   var jsondata = request.body;
-
-  //Bulk insert using nested array [ [a,b],[c,d] ] will be flattened to (a,b),(c,d)
-  connection.query('UPDATE Country SET country_name = ?, gdp = ?, inflation = ? WHERE code = ?;', [jsondata.country_name, jsondata.gdp, jsondata.inflation, jsondata.code], function(err, result) {
-    if (result.affectedRows == 0) {
+  var values = [
+    jsondata.player_name,
+    jsondata.age_drafted,
+    jsondata.position,
+    jsondata.country,
+    jsondata.college_id,
+    jsondata.start_year,
+    jsondata.graduate_year,
+    jsondata.round_drafted,
+    jsondata.pick_number,
+    jsondata.team_code,
+    jsondata.player_id
+  ];
+  connection.query("UPDATE Player SET player_name = ?, age_drafted = ?," +
+  " position = ?, country = ?, college_id = ?, from_year = ?, to_year = ?, round = ?," +
+  " pick_number = ?, team_code = ? WHERE player_id = ?;", values, function(err, result) {
+    console.log(result);
+    if (result.rowCount == 0) {
       response.status(501).send("The row that you are trying to update doesn't exist.");
     } else {
       response.send('Success');
@@ -85,11 +118,11 @@ function updateTestTable(request, response) {
   });
 }
 
-function deleteFromTestTable(request, response) {
-  var jsondata = request.body.code;
+function del(request, response) {
+  var jsondata = request.body.player_id;
 
   //Bulk insert using nested array [ [a,b],[c,d] ] will be flattened to (a,b),(c,d)
-  connection.query('DELETE FROM Country WHERE code = ?', jsondata, function(err, result) {
+  connection.query('DELETE FROM Player WHERE player_id = ?', jsondata, function(err, result) {
     if (result.affectedRows == 0) {
       response.status(502).send("The row that you are trying to delete doesn't exist.");
     } else {

@@ -7,10 +7,17 @@ function sendInsertJSON(){
 
   var http = new XMLHttpRequest();
   var data = JSON.stringify([{ // T insert needs to have ([{}]) format for some weird reason
-        code: document.getElementById("code").value,
-        country_name: document.getElementById("name").value,
-        gdp: document.getElementById("gdp").value,
-        inflation: document.getElementById("inflation").value
+        player_id: document.getElementById("id").value,
+        player_name: document.getElementById("name").value,
+        age_drafted: document.getElementById("age").value,
+        position: document.getElementById("position").value,
+        country: document.getElementById("country").value,
+        college_id: document.getElementById("college").value,
+        start_year: document.getElementById("start").value,
+        graduate_year: document.getElementById("end").value,
+        round_drafted: document.getElementById("round").value,
+        pick_number: document.getElementById("pick").value,
+        team_code: document.getElementById("team").value
   }]);
   console.log(data);
   http.open("POST", "http://localhost:3000/loadTableData");
@@ -27,17 +34,24 @@ function sendInsertJSON(){
     }
   };
   http.send(data);
-  document.location.reload();
+  window.open("http://localhost:3000/NBAData", "_self");
 }
 
 function sendUpdateJSON(){
 
   var http = new XMLHttpRequest();
   var data = JSON.stringify({
-        code: document.getElementById("update-code").value,
-        country_name: document.getElementById("update-name").value,
-        gdp: document.getElementById("update-gdp").value,
-        inflation: document.getElementById("update-inflation").value
+    player_id: document.getElementById("id-update").value,
+    player_name: document.getElementById("name-update").value,
+    age_drafted: document.getElementById("age-update").value,
+    position: document.getElementById("position-update").value,
+    country: document.getElementById("country-update").value,
+    college_id: document.getElementById("college-update").value,
+    start_year: document.getElementById("start-update").value,
+    graduate_year: document.getElementById("end-update").value,
+    round_drafted: document.getElementById("round-update").value,
+    pick_number: document.getElementById("pick-update").value,
+    team_code: document.getElementById("team-update").value
   });
   http.open("PUT", "http://localhost:3000/loadTableData");
   console.log(data);
@@ -54,7 +68,7 @@ function sendUpdateJSON(){
 
   };
   http.send(data);
-  document.location.reload();
+  window.open("http://localhost:3000/NBAData", "_self");
 }
 
 
@@ -62,7 +76,7 @@ function sendDeleteJSON(){
 
   var http = new XMLHttpRequest();
   var data = JSON.stringify({
-        code: document.getElementById("delete-code").value,
+        player_id: document.getElementById("id-delete").value,
   });
   http.open("DELETE", "http://localhost:3000/loadTableData");
   console.log(data);
@@ -78,7 +92,7 @@ function sendDeleteJSON(){
     }
   };
   http.send(data);
-  document.location.reload();
+  window.open("http://localhost:3000/NBAData", "_self");
 }
 
 

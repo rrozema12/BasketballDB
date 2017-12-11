@@ -1,4 +1,4 @@
---   Ryan Rozema
+   Ryan Rozema
 --   Assignment 2
 --   CPSC 321
 --   September 12 2017

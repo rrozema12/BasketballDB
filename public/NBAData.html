@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Test Table</title>
+  <title>Your NBA Data</title>
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/css/select2.min.css" rel="stylesheet" />
@@ -16,7 +16,7 @@
   #location {
       font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
       border-collapse: collapse;
-      width: 100%;
+      width: 90%;
   }
 
   #location td, #location th {
@@ -36,12 +36,12 @@
       color: white;
   }
   </style>
-  <div>
+  <div >
     <div>
       <form action="http://localhost:3000/">
         <input type="submit" value="Go back to main screen" />
       </form>
-      <form action="http://localhost:3000/">
+      <form action="http://localhost:3000/updateNBAData">
         <input type="submit" value="Update Table Values" />
       </form>
     </div>
@@ -53,26 +53,6 @@
 
 <br><br>
 
-  <form>
-    Code: <input type="text" id="code"><br>
-    Country Name: <input type="text" id="name"><br>
-    GDP: <input type="text" id="gdp"><br>
-    Inflation: <input type="text" id="inflation"><br>
-    <input type="button" onclick="sendInsertJSON()" value="Submit new data">
-  </form>
-<br><br>
-  <form>
-    Enter a code to delete a country: <input type="text" id="delete-code"><br>
-    <input type="button" onclick="sendDeleteJSON()" value="Submit new data">
-  </form>
-<br><br>
-  <form>
-    Code: <input type="text" id="update-code"><br>
-    Country Name: <input type="text" id="update-name"><br>
-    GDP: <input type="text" id="update-gdp"><br>
-    Inflation: <input type="text" id="update-inflation"><br>
-    <input type="button" onclick="sendUpdateJSON()" value="Submit new data">
-  </form>
 
   <script src="scripts.js"></script>
 
