@@ -233,8 +233,7 @@ function update(request, response) {
     " position = ?, country = ?, college_id = ?, from_year = ?, to_year = ?, round = ?," +
     " pick_number = ?, team_code = ? WHERE player_id = ?;", values,
     function(err, result) {
-      console.log(result);
-      if (result.rowCount == 0) {
+      if (result.affectedRows == 0) {
         response.status(501).send("The row that you are trying to update doesn't exist.");
       } else {
         response.send('Success');

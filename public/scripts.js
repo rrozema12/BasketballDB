@@ -1,12 +1,7 @@
-// In your Javascript (external .js resource or <script> tag)
-$(document).ready(function() {
-  $('.js-example-basic-single').select2();
-});
-
 function sendInsertJSON() {
 
   var http = new XMLHttpRequest();
-  var data = JSON.stringify([{ // T insert needs to have ([{}]) format for some weird reason
+  var data = JSON.stringify([{ // Insert needs to have ([{}])
     player_id: document.getElementById("id").value,
     player_name: document.getElementById("name").value,
     age_drafted: document.getElementById("age").value,
@@ -22,7 +17,6 @@ function sendInsertJSON() {
   console.log(data);
   http.open("POST", "http://localhost:3000/loadTableData");
 
-
   //Send the proper header information along with the request
   http.setRequestHeader("Content-type", "application/json");
 
@@ -33,7 +27,7 @@ function sendInsertJSON() {
     }
   };
   http.send(data);
-  window.open("http://localhost:3000/NBAData", "_self");
+  window.open("http://localhost:3000/", "_self");
 }
 
 function sendUpdateJSON() {
@@ -66,7 +60,7 @@ function sendUpdateJSON() {
 
   };
   http.send(data);
-  window.open("http://localhost:3000/NBAData", "_self");
+  window.open("http://localhost:3000/", "_self");
 }
 
 
@@ -89,10 +83,11 @@ function sendDeleteJSON() {
     }
   };
   http.send(data);
-  window.open("http://localhost:3000/NBAData", "_self");
+  window.open("http://localhost:3000/", "_self");
 }
 
 $("document").ready(function() {
+  document.getElementById("update").style.display ="none";
   $("#mainselect").change(function() {
     console.log("test");
     var service = 'http://localhost:3000/';
@@ -107,6 +102,7 @@ $("document").ready(function() {
       document.getElementById("colleges1").style.display = "none";
       document.getElementById("colleges2").style.display = "none";
       document.getElementById("button").style.display = "none";
+      document.getElementById("header").innerHTML = "BasketballDB";
       if (test == "query1") {
         var e = document.getElementById("countryselect");
         var country = e.options[e.selectedIndex].value;
@@ -227,7 +223,7 @@ $("document").ready(function() {
             alert(msg.responseText);
           }
         });
-      }else if (test == "query5") {
+      } else if (test == "query5") {
         $.ajax({
           type: "GET",
           url: service + 'loadTableData/mostGamesPlayed/',
@@ -256,10 +252,10 @@ $("document").ready(function() {
           }
         });
       } else if (test == "query6") {
-        var e = document.getElementById("firstcollege");
-        var firstcollege = e.options[e.selectedIndex].value;
-        var x = document.getElementById("secondcollege");
-        var secondcollege = x.options[x.selectedIndex].value;
+        var a = document.getElementById("firstcollege");
+        var firstcollege = a.options[a.selectedIndex].value;
+        var b = document.getElementById("secondcollege");
+        var secondcollege = b.options[b.selectedIndex].value;
         $.ajax({
           type: "GET",
           url: service + 'loadTableData/collegeOne/' + firstcollege + '/collegeTwo/' + secondcollege,
@@ -343,7 +339,8 @@ $("document").ready(function() {
             alert(msg.responseText);
           }
         });
-      }else if (test == "query9") {
+      } else if (test == "query9") {
+        document.getElementById("update").style.display = "";
         $.ajax({
           type: "GET",
           url: service + 'loadTableData/allPlayers/',
@@ -353,16 +350,16 @@ $("document").ready(function() {
             var txt = '';
             data = JSON.parse(jsondata);
             txt += "<tr><th>player_id</th><th>player_name</th><th>age_drafted</th>" +
-            "<th>position</th><th>country</th><th>college_id</th>" +
-            "<th>from_year</th><th>to_year</th><th>round</th>" +
-            "<th>pick_number</th><th>team_code</th></tr>";
+              "<th>position</th><th>country</th><th>college_id</th>" +
+              "<th>from_year</th><th>to_year</th><th>round</th>" +
+              "<th>pick_number</th><th>team_code</th></tr>";
 
             for (var j in data) {
               txt += "<tr><td>" + data[j].player_id + "</td><td>" + data[j].player_name + "</td><td>" +
-               data[j].age_drafted + "</td><td>" + data[j].position + "</td><td>" + data[j].country +
-              "</td><td>" + data[j].college_id + "</td><td>" + data[j].from_year +
-              "</td><td>" + data[j].to_year + "</td><td>" + data[j].round + "</td><td>" + data[j].pick_number +
-              "</td><td>" + data[j].team_code + "</td></tr>";
+                data[j].age_drafted + "</td><td>" + data[j].position + "</td><td>" + data[j].country +
+                "</td><td>" + data[j].college_id + "</td><td>" + data[j].from_year +
+                "</td><td>" + data[j].to_year + "</td><td>" + data[j].round + "</td><td>" + data[j].pick_number +
+                "</td><td>" + data[j].team_code + "</td></tr>";
             }
             newtxt = txt;
             var template = $("#tableData").html();
@@ -383,6 +380,10 @@ $("document").ready(function() {
     $("#reset").click(function() {
       location.reload();
       document.getElementById("querypicker").style.display = "";
+    });
+
+    $("#update").click(function() {
+      window.open("http://localhost:3000/updateNBAData", "_self");
     });
 
   });
