@@ -91,7 +91,7 @@ function query3(request, response) {
   var position = request.params.position;
 
   var result;
-  var queryString = "SELECT t.team_name, COUNT(*) AS first_picks FROM Player p, Team t WHERE p.round = 1 AND p.pick_number = 1 AND t.team_code = p.team_code GROUP BY p.team_code ORDER BY first_picks DESC;";
+  var queryString = "SELECT t.team_name, COUNT(*) AS first_picks FROM Player p, Team t, Draft d WHERE d.player_id = p.player_id AND d.round = 1 AND d.pick_number = 1 AND t.team_code = p.team_code GROUP BY p.team_code ORDER BY first_picks DESC;";
 
   connection.query(queryString, function(err, rows, fields) {
     if (err) throw err;
@@ -105,7 +105,7 @@ function query4(request, response) {
   var position = request.params.position;
 
   var result;
-  var queryString = "SELECT c.college_name, COUNT(*) AS first_picks FROM Player p, College c WHERE p.round = 1 AND p.pick_number = 1 AND c.college_id = p.college_id GROUP BY c.college_id ORDER BY first_picks DESC;";
+  var queryString = "SELECT c.college_name, COUNT(*) AS first_picks FROM Player p, College c, Draft d WHERE d.player_id = p.player_id AND d.round = 1 AND d.pick_number = 1 AND c.college_id = p.college_id GROUP BY c.college_id ORDER BY first_picks DESC;";
 
   connection.query(queryString, function(err, rows, fields) {
     if (err) throw err;
@@ -161,7 +161,7 @@ function query8(request, response) {
   var position = request.params.position;
 
   var result;
-  var queryString = "SELECT player_name, to_year - from_year AS career_length FROM Player ORDER BY career_length DESC LIMIT 10;";
+  var queryString = "SELECT p.player_name, d.to_year - d.from_year AS career_length FROM Player p, Draft d WHERE d.player_id = p.player_id ORDER BY career_length DESC LIMIT 10;";
 
   connection.query(queryString, function(err, rows, fields) {
     if (err) throw err;
@@ -193,14 +193,9 @@ function insert(request, response) {
     values.push([
       jsondata[i].player_id,
       jsondata[i].player_name,
-      jsondata[i].age_drafted,
       jsondata[i].position,
       jsondata[i].country,
       jsondata[i].college_id,
-      jsondata[i].start_year,
-      jsondata[i].graduate_year,
-      jsondata[i].round_drafted,
-      jsondata[i].pick_number,
       jsondata[i].team_code
     ]);
 
@@ -218,20 +213,15 @@ function update(request, response) {
   var jsondata = request.body;
   var values = [
     jsondata.player_name,
-    jsondata.age_drafted,
     jsondata.position,
     jsondata.country,
     jsondata.college_id,
-    jsondata.start_year,
-    jsondata.graduate_year,
-    jsondata.round_drafted,
-    jsondata.pick_number,
     jsondata.team_code,
     jsondata.player_id
   ];
-  connection.query("UPDATE Player SET player_name = ?, age_drafted = ?," +
-    " position = ?, country = ?, college_id = ?, from_year = ?, to_year = ?, round = ?," +
-    " pick_number = ?, team_code = ? WHERE player_id = ?;", values,
+  connection.query("UPDATE Player SET player_name = ?," +
+    " position = ?, country = ?, college_id = ?," +
+    " team_code = ? WHERE player_id = ?;", values,
     function(err, result) {
       if (result.affectedRows == 0) {
         response.status(501).send("The row that you are trying to update doesn't exist.");

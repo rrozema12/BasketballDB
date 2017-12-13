@@ -20,7 +20,7 @@
       <label class="control-label">Select a query you want to use</label>
       <select id="mainselect" onchange="queryselection(this)">
       <option id="0" value="query0">Select a query</option>
-		  <option id="1" value="query1">Players who were foreign born</option>
+		  <option id="1" value="query1">Players who were born in a particular country</option>
 		  <option id="2" value="query2">Best shooting percentage by position</option>
 		  <option id="3" value="query3">Most 1st overall picks by team</option>
 		  <option id="4" value="query4">Most 1st overall picks by school</option>
@@ -35,7 +35,7 @@
 
   <div id="country" style="display: none">
     <div class="form-group">
-      <label class="control-label">Select a foriegn country</label>
+      <label class="control-label" style="">Select a country country</label>
       <select id="countryselect">
       <option id="c0" value="us" selected="selected">United States</option>
 		  <option id="c1" value="ar">Argentina</option>
@@ -113,11 +113,11 @@
     </div>
   </div>
 
-  <button id="reset">New Query</button>
+  <button id="reset" class="btnflt3" >New Query</button>
 
-  <button id="button">See your results</button>
+  <button id="button" class="btnflt3">See your results</button>
 
-  <button id="update">Update table values</button>
+  <button id="update" class="btnflt3">Update table values</button>
 
   <style>
     #location {
@@ -144,7 +144,7 @@
       padding-top: 12px;
       padding-bottom: 12px;
       text-align: center;
-      background-color: blue;
+      background-color: #08c;
       color: white;
     }
   </style>
