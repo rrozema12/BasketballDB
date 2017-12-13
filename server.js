@@ -64,7 +64,7 @@ function query1(request, response) {
   var country = request.params.country;
 
   var result;
-  var queryString = "SELECT player_name, country FROM Player WHERE country <> ?";
+  var queryString = "SELECT player_name, country FROM Player WHERE country = ?";
 
   connection.query(queryString, country, function(err, rows, fields) {
     if (err) throw err;

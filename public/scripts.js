@@ -92,71 +92,323 @@ function sendDeleteJSON() {
   window.open("http://localhost:3000/NBAData", "_self");
 }
 
+$("document").ready(function() {
+  $("#mainselect").change(function() {
+    console.log("test");
+    var service = 'http://localhost:3000/';
+    jQuery.support.cors = true;
+    var e = document.getElementById("mainselect");
+    var test = e.options[e.selectedIndex].value;
+    console.log(test);
+    $("#button").click(function() {
+      document.getElementById("querypicker").style.display = "none";
+      document.getElementById("position").style.display = "none";
+      document.getElementById("country").style.display = "none";
+      document.getElementById("colleges1").style.display = "none";
+      document.getElementById("colleges2").style.display = "none";
+      document.getElementById("button").style.display = "none";
+      if (test == "query1") {
+        var e = document.getElementById("countryselect");
+        var country = e.options[e.selectedIndex].value;
+        console.log(country);
+        $.ajax({
+          type: "GET",
+          url: service + 'loadTableData/country/' + country,
+          contentType: "application/json; charset=utf-8",
+          success: function(data) {
+            jsondata = JSON.stringify(data);
+            //alert(jsondata);
+            var txt = '';
+            data = JSON.parse(jsondata);
+            console.log(jsondata);
+            //alert("data" + data);
+            txt += "<tr><th>player_name</th><th>country</th></tr>";
+            for (var j in data) {
+              txt += "<tr><td>" + data[j].player_name + "</td><td>" + data[j].country + "</td></tr>";
+            }
+            //alert(txt);
+            var template = $("#tableData").html();
+            Mustache.parse(template);
+            var rendered = Mustache.render(template, {
+              tableData: txt
+            });
+            $("#location").html(rendered);
+            console.log(document.getElementById("location").innerHTML);
 
-$(document).ready(function() {
-  var service = 'http://localhost:3000/';
-  jQuery.support.cors = true;
-  var test = 2;
-  if (test == 1) {
-    $.ajax({
-      type: "GET",
-      url: service + 'loadTableData/position/G',
-      contentType: "application/json; charset=utf-8",
-      success: function(data) {
-        populateTable(data);
-      },
+          },
 
-      error: function(msg) {
-        alert(msg.responseText);
+          error: function(msg) {
+            alert(msg.responseText);
+          }
+        });
+      } else if (test == "query2") {
+        var x = document.getElementById("positionselect");
+        var position = x.options[x.selectedIndex].value;
+        $.ajax({
+          type: "GET",
+          url: service + 'loadTableData/position/' + position,
+          contentType: "application/json; charset=utf-8",
+          success: function(data) {
+            jsondata = JSON.stringify(data);
+            var txt = '';
+            data = JSON.parse(jsondata);
+            txt += "<tr><th>player_name</th><th>field_goal_pct</th><th>position</th></tr>";
+
+            for (var j in data) {
+              txt += "<tr><td>" + data[j].player_name + "</td><td>" + data[j].field_goal_pct + "</td><td>" + data[j].position + "</td></tr>";
+            }
+            newtxt = txt;
+            var template = $("#tableData").html();
+            Mustache.parse(template);
+            var rendered = Mustache.render(template, {
+              tableData: txt
+            });
+            $("#location").html(rendered);
+            console.log(document.getElementById("location").innerHTML);
+          },
+
+          error: function(msg) {
+            alert(msg.responseText);
+          }
+        });
+      } else if (test == "query3") {
+        $.ajax({
+          type: "GET",
+          url: service + 'loadTableData/topPicks/',
+          contentType: "application/json; charset=utf-8",
+          success: function(data) {
+            jsondata = JSON.stringify(data);
+            var txt = '';
+            data = JSON.parse(jsondata);
+            txt += "<tr><th>team_name</th><th>first_picks</th></tr>";
+
+            for (var j in data) {
+              txt += "<tr><td>" + data[j].team_name + "</td><td>" + data[j].first_picks + "</td></tr>";
+            }
+            newtxt = txt;
+            var template = $("#tableData").html();
+            Mustache.parse(template);
+            var rendered = Mustache.render(template, {
+              tableData: txt
+            });
+            $("#location").html(rendered);
+            console.log(document.getElementById("location").innerHTML);
+          },
+
+          error: function(msg) {
+            alert(msg.responseText);
+          }
+        });
+      } else if (test == "query4") {
+        $.ajax({
+          type: "GET",
+          url: service + 'loadTableData/bestColleges/',
+          contentType: "application/json; charset=utf-8",
+          success: function(data) {
+            jsondata = JSON.stringify(data);
+            var txt = '';
+            data = JSON.parse(jsondata);
+            txt += "<tr><th>college_name</th><th>first_picks</th></tr>";
+
+            for (var j in data) {
+              txt += "<tr><td>" + data[j].college_name + "</td><td>" + data[j].first_picks + "</td></tr>";
+            }
+            newtxt = txt;
+            var template = $("#tableData").html();
+            Mustache.parse(template);
+            var rendered = Mustache.render(template, {
+              tableData: txt
+            });
+            $("#location").html(rendered);
+            console.log(document.getElementById("location").innerHTML);
+          },
+
+          error: function(msg) {
+            alert(msg.responseText);
+          }
+        });
+      }else if (test == "query5") {
+        $.ajax({
+          type: "GET",
+          url: service + 'loadTableData/mostGamesPlayed/',
+          contentType: "application/json; charset=utf-8",
+          success: function(data) {
+            jsondata = JSON.stringify(data);
+            var txt = '';
+            data = JSON.parse(jsondata);
+            txt += "<tr><th>college_name</th><th>games_played</th></tr>";
+
+            for (var j in data) {
+              txt += "<tr><td>" + data[j].college_name + "</td><td>" + data[j].games_played + "</td></tr>";
+            }
+            newtxt = txt;
+            var template = $("#tableData").html();
+            Mustache.parse(template);
+            var rendered = Mustache.render(template, {
+              tableData: txt
+            });
+            $("#location").html(rendered);
+            console.log(document.getElementById("location").innerHTML);
+          },
+
+          error: function(msg) {
+            alert(msg.responseText);
+          }
+        });
+      } else if (test == "query6") {
+        var e = document.getElementById("firstcollege");
+        var firstcollege = e.options[e.selectedIndex].value;
+        var x = document.getElementById("secondcollege");
+        var secondcollege = x.options[x.selectedIndex].value;
+        $.ajax({
+          type: "GET",
+          url: service + 'loadTableData/collegeOne/' + firstcollege + '/collegeTwo/' + secondcollege,
+          contentType: "application/json; charset=utf-8",
+          success: function(data) {
+            jsondata = JSON.stringify(data);
+            var txt = '';
+            data = JSON.parse(jsondata);
+            txt += "<tr><th>player_name</th><th>college_name</th><th>points</th></tr>";
+
+            for (var j in data) {
+              txt += "<tr><td>" + data[j].player_name + "</td><td>" + data[j].college_name + "</td><td>" + data[j].points + "</td></tr>";
+            }
+            newtxt = txt;
+            var template = $("#tableData").html();
+            Mustache.parse(template);
+            var rendered = Mustache.render(template, {
+              tableData: txt
+            });
+            $("#location").html(rendered);
+            console.log(document.getElementById("location").innerHTML);
+          },
+
+          error: function(msg) {
+            alert(msg.responseText);
+          }
+        });
+      } else if (test == "query7") {
+        $.ajax({
+          type: "GET",
+          url: service + 'loadTableData/multipleDrafts/',
+          contentType: "application/json; charset=utf-8",
+          success: function(data) {
+            jsondata = JSON.stringify(data);
+            var txt = '';
+            data = JSON.parse(jsondata);
+            txt += "<tr><th>player_name</th><th>times_drafted</th></tr>";
+
+            for (var j in data) {
+              txt += "<tr><td>" + data[j].player_name + "</td><td>" + data[j].times_drafted + "</td></tr>";
+            }
+            newtxt = txt;
+            var template = $("#tableData").html();
+            Mustache.parse(template);
+            var rendered = Mustache.render(template, {
+              tableData: txt
+            });
+            $("#location").html(rendered);
+            console.log(document.getElementById("location").innerHTML);
+          },
+
+          error: function(msg) {
+            alert(msg.responseText);
+          }
+        });
+      } else if (test == "query8") {
+        $.ajax({
+          type: "GET",
+          url: service + 'loadTableData/longestCareers/',
+          contentType: "application/json; charset=utf-8",
+          success: function(data) {
+            jsondata = JSON.stringify(data);
+            var txt = '';
+            data = JSON.parse(jsondata);
+            txt += "<tr><th>player_name</th><th>career_length</th></tr>";
+
+            for (var j in data) {
+              txt += "<tr><td>" + data[j].player_name + "</td><td>" + data[j].career_length + "</td></tr>";
+            }
+            newtxt = txt;
+            var template = $("#tableData").html();
+            Mustache.parse(template);
+            var rendered = Mustache.render(template, {
+              tableData: txt
+            });
+            $("#location").html(rendered);
+            console.log(document.getElementById("location").innerHTML);
+          },
+
+          error: function(msg) {
+            alert(msg.responseText);
+          }
+        });
+      }else if (test == "query9") {
+        $.ajax({
+          type: "GET",
+          url: service + 'loadTableData/allPlayers/',
+          contentType: "application/json; charset=utf-8",
+          success: function(data) {
+            jsondata = JSON.stringify(data);
+            var txt = '';
+            data = JSON.parse(jsondata);
+            txt += "<tr><th>player_id</th><th>player_name</th><th>age_drafted</th>" +
+            "<th>position</th><th>country</th><th>college_id</th>" +
+            "<th>from_year</th><th>to_year</th><th>round</th>" +
+            "<th>pick_number</th><th>team_code</th></tr>";
+
+            for (var j in data) {
+              txt += "<tr><td>" + data[j].player_id + "</td><td>" + data[j].player_name + "</td><td>" +
+               data[j].age_drafted + "</td><td>" + data[j].position + "</td><td>" + data[j].country +
+              "</td><td>" + data[j].college_id + "</td><td>" + data[j].from_year +
+              "</td><td>" + data[j].to_year + "</td><td>" + data[j].round + "</td><td>" + data[j].pick_number +
+              "</td><td>" + data[j].team_code + "</td></tr>";
+            }
+            newtxt = txt;
+            var template = $("#tableData").html();
+            Mustache.parse(template);
+            var rendered = Mustache.render(template, {
+              tableData: txt
+            });
+            $("#location").html(rendered);
+            console.log(document.getElementById("location").innerHTML);
+          },
+
+          error: function(msg) {
+            alert(msg.responseText);
+          }
+        });
       }
     });
-  } else {
-    $.ajax({
-      type: "GET",
-      url: service + 'loadTableData/country/us',
-      contentType: "application/json; charset=utf-8",
-      success: function(data) {
-        populateTable(data);
-      },
-
-      error: function(msg) {
-        alert(msg.responseText);
-      }
+    $("#reset").click(function() {
+      location.reload();
+      document.getElementById("querypicker").style.display = "";
     });
-  }
+
+  });
 });
 
-
-function populateTable(data) {
-  // EXTRACT VALUE FOR HTML HEADER.
-  var col = [];
-  for (var i = 0; i < data.length; i++) {
-    for (var key in data[i]) {
-      if (col.indexOf(key) === -1) {
-        col.push(key);
-      }
-    }
-  }
-
-  // CREATE DYNAMIC TABLE.
-  var table = document.getElementById("location");
-
-  // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
-
-  var tr = table.insertRow(-1); // TABLE ROW.
-
-  for (i = 0; i < col.length; i++) {
-    var th = document.createElement("th"); // TABLE HEADER.
-    th.innerHTML = col[i];
-    tr.appendChild(th);
-  }
-
-  // ADD JSON DATA TO THE TABLE AS ROWS.
-  for (i = 0; i < data.length; i++) {
-    tr = table.insertRow(-1);
-    for (var j = 0; j < col.length; j++) {
-      var tabCell = tr.insertCell(-1);
-      tabCell.innerHTML = data[i][col[j]];
-    }
+function queryselection(selectObject) {
+  var value = selectObject.value;
+  if (value == "query1") {
+    document.getElementById("position").style.display = "none";
+    document.getElementById("country").style.display = "";
+    document.getElementById("colleges1").style.display = "none";
+    document.getElementById("colleges2").style.display = "none";
+  } else if (value == "query2") {
+    document.getElementById("position").style.display = "";
+    document.getElementById("country").style.display = "none";
+    document.getElementById("colleges1").style.display = "none";
+    document.getElementById("colleges2").style.display = "none";
+  } else if (value == "query6") {
+    document.getElementById("position").style.display = "none";
+    document.getElementById("country").style.display = "none";
+    document.getElementById("colleges1").style.display = "";
+    document.getElementById("colleges2").style.display = "";
+  } else {
+    document.getElementById("position").style.display = "none";
+    document.getElementById("country").style.display = "none";
+    document.getElementById("colleges1").style.display = "none";
+    document.getElementById("colleges2").style.display = "none";
   }
 }
