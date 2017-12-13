@@ -8,23 +8,51 @@
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/js/select2.min.js"></script>
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
 </head>
 
 <body>
+  <style>
+  #location {
+      font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+  }
 
-  <div class="w3-container">
-    <table id="location" class="w3-table-all">
+  #location td, #location th {
+      border: 1px solid #ddd;
+      padding: 8px;
+  }
+
+  #location tr:nth-child(even){background-color: #f2f2f2;}
+
+  #location tr:hover {background-color: #ddd;}
+
+  #location th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: left;
+      background-color: blue;
+      color: white;
+  }
+  </style>
+  <div>
+    <div>
+      <form action="http://localhost:3000/">
+        <input type="submit" value="Go back to main screen" />
+      </form>
+      <form action="http://localhost:3000/">
+        <input type="submit" value="Update Table Values" />
+      </form>
+    </div>
+    <br><br>
+    <table id="location">
 
   </table>
   </div>
 
 <br><br>
-  <form action="http://localhost:3000/">
-    <input type="submit" value="Go back to main screen" />
-  </form>
-  <br><br>
+
   <form>
     Code: <input type="text" id="code"><br>
     Country Name: <input type="text" id="name"><br>

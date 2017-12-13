@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Test Table</title>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/js/select2.min.js"></script>
+
+</head>
+
+<body>
+
+  <form action="http://localhost:3000/">
+    <input type="submit" value="Go back to the query page" />
+  </form>
+<br><br>
+<form action="http://localhost:3000/">
+  Player ID: <input type="text" id="id"><br>
+  Player Name: <input type="text" id="name"><br>
+  Age Drafted: <input type="text" id="age"><br>
+  Position: <input type="text" id="position"><br>
+  Country: <input type="text" id="country"><br>
+  College ID: <input type="text" id="college"><br>
+  From Year: <input type="text" id="start"><br>
+  To Year: <input type="text" id="end"><br>
+  Round Drafted: <input type="text" id="round"><br>
+  Pick Number: <input type="text" id="pick"><br>
+  Team Code: <input type="text" id="team"><br>
+  <input type="button" onclick="sendInsertJSON()" value="Insert Row">
+</form>
+<br><br>
+<form action="http://localhost:3000/">
+  Player ID: <input type="text" id="id-delete"><br>
+  <input type="button" onclick="sendDeleteJSON()" value="Delete Row">
+</form>
+<br><br>
+<form action="http://localhost:3000/">
+  Player ID: <input type="text" id="id-update"><br>
+  Player Name: <input type="text" id="name-update"><br>
+  Age Drafted: <input type="text" id="age-update"><br>
+  Position: <input type="text" id="position-update"><br>
+  Country: <input type="text" id="country-update"><br>
+  College ID: <input type="text" id="college-update"><br>
+  From Year: <input type="text" id="start-update"><br>
+  To Year: <input type="text" id="end-update"><br>
+  Round Drafted: <input type="text" id="round-update"><br>
+  Pick Number: <input type="text" id="pick-update"><br>
+  Team Code: <input type="text" id="team-update"><br>
+  <input type="button" onclick="sendUpdateJSON()" value="Update Row">
+</form>
+
+<script src="scripts.js"></script>
+</body>
+</html>
